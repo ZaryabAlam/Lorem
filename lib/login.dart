@@ -1,14 +1,21 @@
-﻿import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task1/home2.dart';
 import 'package:task1/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
+  final VoidCallback onClickedSignUp;
+
+  const Login({
+    Key key,
+    this.onClickedSignUp,
+  }) : super(key: key);
+
   @override
   State<Login> createState() => _LoginState();
 }
-
-//test
 
 class _LoginState extends State<Login> {
   final textFieldFocusNode = FocusNode();
@@ -48,7 +55,7 @@ class _LoginState extends State<Login> {
           children: [
 ///////////////////////////////////////////////////////////////////////
             SizedBox(
-              height: _h * 0.08,
+              height: _h * 0.02,
             ),
 ///////////////////////////////////////////////////////////////////////
             Center(
@@ -62,7 +69,7 @@ class _LoginState extends State<Login> {
             ),
 ///////////////////////////////////////////////////////////////////////
             SizedBox(
-              height: _h * 0.08,
+              height: _h * 0.05,
             ),
 ///////////////////////////////////////////////////////////////////////
             Container(
@@ -167,30 +174,87 @@ class _LoginState extends State<Login> {
                           "LOG IN",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )))),
-            ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.03,
-            ),
-///////////////////////////////////////////////////////////////////////
-            Column(
+            SizedBox(height: 12),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Delevoped by © Zaryab Alam",
-                  style: TextStyle(
-                      color: Colors.black54, fontWeight: FontWeight.w300),
-                ),
-                Text(
-                  "Made for MS-Global Inc with LOVE",
-                  style: TextStyle(
-                      color: Colors.black54, fontWeight: FontWeight.w300),
-                ),
-                Text(
-                  'Terms of Service | Privacy Policy',
-                  style: TextStyle(
-                      color: Colors.black54, fontWeight: FontWeight.w300),
+                Text("Create Account  "),
+                GestureDetector(
+                  onTap: singup,
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Color(0xffE43228),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
                 ),
               ],
             ),
+/////////////////////////////////////////////////////////////////////////////////
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: _h * 0.2,
+                  width: _w * 0.2,
+                  child: IconButton(
+                      icon: Image.asset(
+                        "assets/google.png",
+                        fit: BoxFit.cover,
+                      ),
+                      onPressed: () async {
+                        const url =
+                            'https://accounts.google.com/v3/signin/identifier?dsh=S-251231302%3A1663782779691460&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F%26ogbl%2F&emr=1&ltmpl=default&ltmplcache=2&osid=1&passive=true&rm=false&scc=1&service=mail&ss=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin&ifkv=AQDHYWov1HYEBHuWBN_m80xuHQYWeafjv3SjrJPJWHgKO0hkWIU7vbUzR1H1up9hCzvJK9h74UO5iw';
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      }),
+                ),
+                Container(
+                  height: _h * 0.2,
+                  width: _w * 0.2,
+                  child: IconButton(
+                      icon: Image.asset("assets/facebook.png"),
+                      onPressed: () async {
+                        const url = 'https://www.facebook.com/';
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      }),
+                ),
+              ],
+            ),
+///////////////////////////////////////////////////////////////////////
+//             SizedBox(
+//               height: _h * 0.03,
+//             ),
+// ///////////////////////////////////////////////////////////////////////
+//             Column(
+//               children: [
+//                 Text(
+//                   "Delevoped by © Zaryab Alam",
+//                   style: TextStyle(
+//                       color: Colors.black54, fontWeight: FontWeight.w300),
+//                 ),
+//                 Text(
+//                   "Made for MS-Global Inc with LOVE",
+//                   style: TextStyle(
+//                       color: Colors.black54, fontWeight: FontWeight.w300),
+//                 ),
+//                 Text(
+//                   'Terms of Service | Privacy Policy',
+//                   style: TextStyle(
+//                       color: Colors.black54, fontWeight: FontWeight.w300),
+//                 ),
+//               ],
+//             ),
           ],
         ),
       ),
@@ -218,5 +282,9 @@ class _LoginState extends State<Login> {
       }
       navigatorKey.currentState.popUntil((route) => route.isFirst);
     }
+  }
+
+  Future singup() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home2()));
   }
 }

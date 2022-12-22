@@ -14,7 +14,6 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-
 final navigatorKey = GlobalKey<NavigatorState>();
 
 class _MyAppState extends State<MyApp> {
