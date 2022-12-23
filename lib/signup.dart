@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:task1/login.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -54,25 +55,46 @@ class _SignupState extends State<Signup> {
           children: [
 ///////////////////////////////////////////////////////////////////////
             SizedBox(
-              height: _h * 0.08,
+              height: _h * 0.02,
             ),
 ///////////////////////////////////////////////////////////////////////
             Center(
               child: Container(
-                height: 250,
-                width: 250,
+                height: 150,
+                width: 150,
                 decoration: BoxDecoration(
-                    image:
-                        DecorationImage(image: AssetImage("assets/logo2.png"))),
+                    image: DecorationImage(
+                        image: AssetImage("assets/logo1.png"),
+                        fit: BoxFit.cover)),
               ),
             ),
 ///////////////////////////////////////////////////////////////////////
             SizedBox(
-              height: _h * 0.08,
+              height: _h * 0.0,
+            ),
+///////////////////////////////////////////////////////////////////////
+
+            Container(
+              padding: EdgeInsets.only(left: 33),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Create your account",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Color(0xffE43228),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20),
+                ),
+              ),
+            ),
+///////////////////////////////////////////////////////////////////////
+            SizedBox(
+              height: _h * 0.03,
             ),
 ///////////////////////////////////////////////////////////////////////
             Container(
-              height: _h * 0.08,
+              height: _h * 0.07,
               width: _w * 0.85,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -91,7 +113,7 @@ class _SignupState extends State<Signup> {
                   textInputAction: TextInputAction.next,
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     hintText: 'Email',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(16),
@@ -101,11 +123,11 @@ class _SignupState extends State<Signup> {
             ),
 ///////////////////////////////////////////////////////////////////////
             SizedBox(
-              height: _h * 0.03,
+              height: _h * 0.01,
             ),
 ///////////////////////////////////////////////////////////////////////
             Container(
-              height: _h * 0.08,
+              height: _h * 0.07,
               width: _w * 0.85,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -124,7 +146,7 @@ class _SignupState extends State<Signup> {
                   textInputAction: TextInputAction.done,
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     hintText: 'Password',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(16),
@@ -132,8 +154,13 @@ class _SignupState extends State<Signup> {
                 ),
               ),
             ),
+///////////////////////////////////////////////////////////////////////
+            SizedBox(
+              height: _h * 0.01,
+            ),
+///////////////////////////////////////////////////////////////////////
             Container(
-              height: _h * 0.08,
+              height: _h * 0.07,
               width: _w * 0.85,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -152,7 +179,7 @@ class _SignupState extends State<Signup> {
                   textInputAction: TextInputAction.next,
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     hintText: 'Name',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(16),
@@ -160,8 +187,13 @@ class _SignupState extends State<Signup> {
                 ),
               ),
             ),
+///////////////////////////////////////////////////////////////////////
+            SizedBox(
+              height: _h * 0.01,
+            ),
+///////////////////////////////////////////////////////////////////////
             Container(
-              height: _h * 0.08,
+              height: _h * 0.07,
               width: _w * 0.85,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -180,7 +212,7 @@ class _SignupState extends State<Signup> {
                   textInputAction: TextInputAction.next,
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     hintText: 'Username',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(16),
@@ -188,8 +220,13 @@ class _SignupState extends State<Signup> {
                 ),
               ),
             ),
+///////////////////////////////////////////////////////////////////////
+            SizedBox(
+              height: _h * 0.01,
+            ),
+///////////////////////////////////////////////////////////////////////
             Container(
-              height: _h * 0.08,
+              height: _h * 0.07,
               width: _w * 0.85,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -208,7 +245,7 @@ class _SignupState extends State<Signup> {
                   textInputAction: TextInputAction.next,
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     hintText: 'Address',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(16),
@@ -216,8 +253,13 @@ class _SignupState extends State<Signup> {
                 ),
               ),
             ),
+///////////////////////////////////////////////////////////////////////
+            SizedBox(
+              height: _h * 0.01,
+            ),
+///////////////////////////////////////////////////////////////////////
             Container(
-              height: _h * 0.08,
+              height: _h * 0.07,
               width: _w * 0.85,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -236,7 +278,7 @@ class _SignupState extends State<Signup> {
                   textInputAction: TextInputAction.next,
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     hintText: 'Zipcode',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(16),
@@ -246,7 +288,7 @@ class _SignupState extends State<Signup> {
             ),
 ///////////////////////////////////////////////////////////////////////
             SizedBox(
-              height: _h * 0.05,
+              height: _h * 0.04,
             ),
 ///////////////////////////////////////////////////////////////////////
             Center(
@@ -274,9 +316,35 @@ class _SignupState extends State<Signup> {
                           "Sign up",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )))),
+///////////////////////////////////////////////////////////////////////
+            SizedBox(
+              height: _h * 0.03,
+            ),
+///////////////////////////////////////////////////////////////////////
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Already have an account  "),
+                GestureDetector(
+                  onTap: singin,
+                  child: Text(
+                    "Sign In",
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Color(0xffE43228),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future singin() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
   }
 }
