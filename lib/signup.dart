@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task1/login.dart';
+import 'package:task1/main.dart';
+import 'package:email_validator/email_validator.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -9,6 +11,20 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final formKey = GlobalKey<FormState>();
+  final textFieldFocusNode = FocusNode();
+  bool _obscured = true;
+
+  void _toggleObscured() {
+    setState(() {
+      _obscured = !_obscured;
+      if (textFieldFocusNode.hasPrimaryFocus)
+        return; // If focus is on text field, dont unfocus
+      textFieldFocusNode.canRequestFocus =
+          false; // Prevents focus if tap on eye
+    });
+  }
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
@@ -29,6 +45,13 @@ class _SignupState extends State<Signup> {
       final String address = addressController.text;
       final String zipcode = zipcodeController.text;
 
+      final isValid = formKey.currentState.validate();
+      if (!isValid) return;
+
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => Center(child: CircularProgressIndicator()));
       try {
         final UserCredential user = await auth.createUserWithEmailAndPassword(
             email: emailController.text.trim(),
@@ -44,6 +67,7 @@ class _SignupState extends State<Signup> {
         print("**** ERROR ****");
         print(e);
       }
+      navigatorKey.currentState.popUntil((route) => route.isFirst);
     }
 
     final _h = MediaQuery.of(context).size.height;
@@ -51,294 +75,318 @@ class _SignupState extends State<Signup> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.02,
-            ),
-///////////////////////////////////////////////////////////////////////
-            Center(
-              child: Container(
-                height: 150,
-                width: 150,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/logo1.png"),
-                        fit: BoxFit.cover)),
+              SizedBox(
+                height: _h * 0.02,
               ),
-            ),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.0,
-            ),
-///////////////////////////////////////////////////////////////////////
-
-            Container(
-              padding: EdgeInsets.only(left: 33),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Create your account",
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Color(0xffE43228),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20),
+              Center(
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/logo1.png"),
+                          fit: BoxFit.cover)),
                 ),
               ),
-            ),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.03,
-            ),
+              SizedBox(
+                height: _h * 0.0,
+              ),
 ///////////////////////////////////////////////////////////////////////
-            Container(
-              height: _h * 0.07,
-              width: _w * 0.85,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 7),
-                    )
-                  ]),
-              child: Center(
-                child: TextField(
-                  controller: emailController,
-                  textInputAction: TextInputAction.next,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-                    hintText: 'Email',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
+
+              Container(
+                padding: EdgeInsets.only(left: 33),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Create your account",
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Color(0xffE43228),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20),
                   ),
                 ),
               ),
-            ),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.01,
-            ),
+              SizedBox(
+                height: _h * 0.03,
+              ),
 ///////////////////////////////////////////////////////////////////////
-            Container(
-              height: _h * 0.07,
-              width: _w * 0.85,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 7),
-                    )
-                  ]),
-              child: Center(
-                child: TextField(
+              Container(
+                height: _h * 0.07,
+                width: _w * 0.85,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 7),
+                      )
+                    ]),
+                child: Center(
+                  child: TextFormField(
+                    controller: emailController,
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.black,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    validator: (email) =>
+                        email != null && !EmailValidator.validate(email)
+                            ? "Enter a valid email"
+                            : null,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                      hintText: 'Email',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 8, bottom: 2),
+                    ),
+                  ),
+                ),
+              ),
+///////////////////////////////////////////////////////////////////////
+              SizedBox(
+                height: _h * 0.01,
+              ),
+///////////////////////////////////////////////////////////////////////
+              Container(
+                height: _h * 0.07,
+                width: _w * 0.85,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 7),
+                      )
+                    ]),
+                child: TextFormField(
                   controller: passwordController,
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.next,
+                  obscureText: _obscured,
+                  focusNode: textFieldFocusNode,
                   cursorColor: Colors.black,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  validator: (value) => value != null && value.length < 6
+                      ? "Enter atleast 6 letters"
+                      : null,
                   decoration: InputDecoration(
                     hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     hintText: 'Password',
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
+                    contentPadding:
+                        EdgeInsets.only(left: 8, top: 12, bottom: 0),
+                    suffixIcon: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: _toggleObscured,
+                      icon: Icon(
+                        _obscured
+                            ? Icons.visibility_rounded
+                            : Icons.visibility_off_rounded,
+                        color: Colors.red[700],
+                        size: 24,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.01,
-            ),
+              SizedBox(
+                height: _h * 0.01,
+              ),
 ///////////////////////////////////////////////////////////////////////
-            Container(
-              height: _h * 0.07,
-              width: _w * 0.85,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 7),
-                    )
-                  ]),
-              child: Center(
-                child: TextField(
-                  controller: nameController,
-                  textInputAction: TextInputAction.next,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-                    hintText: 'Name',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
+              Container(
+                height: _h * 0.07,
+                width: _w * 0.85,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 7),
+                      )
+                    ]),
+                child: Center(
+                  child: TextField(
+                    controller: nameController,
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.black,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                      hintText: 'Name',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(8),
+                    ),
                   ),
                 ),
               ),
-            ),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.01,
-            ),
+              SizedBox(
+                height: _h * 0.01,
+              ),
 ///////////////////////////////////////////////////////////////////////
-            Container(
-              height: _h * 0.07,
-              width: _w * 0.85,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 7),
-                    )
-                  ]),
-              child: Center(
-                child: TextField(
-                  controller: usernameController,
-                  textInputAction: TextInputAction.next,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-                    hintText: 'Username',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
+              Container(
+                height: _h * 0.07,
+                width: _w * 0.85,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 7),
+                      )
+                    ]),
+                child: Center(
+                  child: TextField(
+                    controller: usernameController,
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.black,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                      hintText: 'Username',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(16),
+                    ),
                   ),
                 ),
               ),
-            ),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.01,
-            ),
+              SizedBox(
+                height: _h * 0.01,
+              ),
 ///////////////////////////////////////////////////////////////////////
-            Container(
-              height: _h * 0.07,
-              width: _w * 0.85,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 7),
-                    )
-                  ]),
-              child: Center(
-                child: TextField(
-                  controller: addressController,
-                  textInputAction: TextInputAction.next,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-                    hintText: 'Address',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
+              Container(
+                height: _h * 0.07,
+                width: _w * 0.85,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 7),
+                      )
+                    ]),
+                child: Center(
+                  child: TextField(
+                    controller: addressController,
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.black,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                      hintText: 'Address',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(16),
+                    ),
                   ),
                 ),
               ),
-            ),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.01,
-            ),
+              SizedBox(
+                height: _h * 0.01,
+              ),
 ///////////////////////////////////////////////////////////////////////
-            Container(
-              height: _h * 0.07,
-              width: _w * 0.85,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 7),
-                    )
-                  ]),
-              child: Center(
-                child: TextField(
-                  controller: zipcodeController,
-                  textInputAction: TextInputAction.next,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-                    hintText: 'Zipcode',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
+              Container(
+                height: _h * 0.07,
+                width: _w * 0.85,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 7),
+                      )
+                    ]),
+                child: Center(
+                  child: TextField(
+                    controller: zipcodeController,
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.black,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                      hintText: 'Zipcode',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(16),
+                    ),
                   ),
                 ),
               ),
-            ),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.04,
-            ),
+              SizedBox(
+                height: _h * 0.04,
+              ),
 ///////////////////////////////////////////////////////////////////////
-            Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 7),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: LinearGradient(
-                            colors: [Color(0xffb82b23), Color(0xffE43228)])),
-                    height: _h * 0.08,
-                    width: _w * 0.85,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.transparent,
-                            shadowColor: Colors.transparent),
-                        onPressed: register,
-                        child: Text(
-                          "Sign up",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )))),
+              Center(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 7),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: LinearGradient(
+                              colors: [Color(0xffb82b23), Color(0xffE43228)])),
+                      height: _h * 0.08,
+                      width: _w * 0.85,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.transparent,
+                              shadowColor: Colors.transparent),
+                          onPressed: register,
+                          child: Text(
+                            "Sign up",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )))),
 ///////////////////////////////////////////////////////////////////////
-            SizedBox(
-              height: _h * 0.03,
-            ),
+              SizedBox(
+                height: _h * 0.03,
+              ),
 ///////////////////////////////////////////////////////////////////////
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Already have an account  "),
-                GestureDetector(
-                  onTap: singin,
-                  child: Text(
-                    "Sign In",
-                    style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Color(0xffE43228),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already have an account  "),
+                  GestureDetector(
+                    onTap: singin,
+                    child: Text(
+                      "Sign In",
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Color(0xffE43228),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -105,7 +105,7 @@ class _LoginState extends State<Login> {
                       hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
                       hintText: 'Email',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(16),
+                      contentPadding: EdgeInsets.all(8),
                     ),
                   ),
                 ),
@@ -138,13 +138,16 @@ class _LoginState extends State<Login> {
                     cursorColor: Colors.black,
                     autovalidateMode: AutovalidateMode.disabled,
                     validator: (value) => value != null && value.length < 3
-                        ? "Enter corrent password"
+                        ? "Enter correct password"
                         : null,
                     decoration: InputDecoration(
                       hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
                       hintText: 'Password',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(16),
+                      contentPadding: EdgeInsets.only(
+                        top: 15,
+                        left: 8,
+                      ),
                       suffixIcon: GestureDetector(
                         onTap: _toggleObscured,
                         child: Icon(
