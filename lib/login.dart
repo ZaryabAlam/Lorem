@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+﻿import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task1/home2.dart';
@@ -14,7 +14,7 @@ class Login extends StatefulWidget {
     Key key,
     this.onClickedSignUp,
   }) : super(key: key);
-
+//test
   @override
   State<Login> createState() => _LoginState();
 }
