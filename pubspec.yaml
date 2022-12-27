@@ -35,6 +35,7 @@ dependencies:
   http: ^0.12.2
   url_launcher: ^5.6.0
   email_validator: ^1.0.6
+  flutter_advanced_drawer: ^1.0.0
   
 
 dev_dependencies:
@@ -60,6 +61,9 @@ flutter:
   assets:
     - assets/logo1.png
     - assets/logo2.png
+    - assets/logo3.png
+    - assets/pic.png
+    - assets/qrcode.png
     - assets/google.png
     - assets/facebook.png
 

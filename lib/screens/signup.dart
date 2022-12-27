@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task1/login.dart';
+import 'package:task1/screens/login.dart';
 import 'package:task1/main.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -9,21 +9,11 @@ class Signup extends StatefulWidget {
   @override
   State<Signup> createState() => _SignupState();
 }
-//test
+
 class _SignupState extends State<Signup> {
   final formKey = GlobalKey<FormState>();
   final textFieldFocusNode = FocusNode();
   bool _obscured = true;
-
-  void _toggleObscured() {
-    setState(() {
-      _obscured = !_obscured;
-      if (textFieldFocusNode.hasPrimaryFocus)
-        return; // If focus is on text field, dont unfocus
-      textFieldFocusNode.canRequestFocus =
-          false; // Prevents focus if tap on eye
-    });
-  }
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -185,19 +175,7 @@ class _SignupState extends State<Signup> {
                     hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                     hintText: 'Password',
                     border: InputBorder.none,
-                    contentPadding:
-                        EdgeInsets.only(left: 8, top: 12, bottom: 0),
-                    suffixIcon: IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _toggleObscured,
-                      icon: Icon(
-                        _obscured
-                            ? Icons.visibility_rounded
-                            : Icons.visibility_off_rounded,
-                        color: Colors.red[700],
-                        size: 24,
-                      ),
-                    ),
+                    contentPadding: EdgeInsets.only(left: 8, bottom: 2),
                   ),
                 ),
               ),
@@ -262,7 +240,7 @@ class _SignupState extends State<Signup> {
                       hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                       hintText: 'Username',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(16),
+                      contentPadding: EdgeInsets.all(8),
                     ),
                   ),
                 ),
@@ -295,7 +273,7 @@ class _SignupState extends State<Signup> {
                       hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                       hintText: 'Address',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(16),
+                      contentPadding: EdgeInsets.all(8),
                     ),
                   ),
                 ),
@@ -328,7 +306,7 @@ class _SignupState extends State<Signup> {
                       hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
                       hintText: 'Zipcode',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(16),
+                      contentPadding: EdgeInsets.all(8),
                     ),
                   ),
                 ),

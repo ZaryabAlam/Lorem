@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task1/login.dart';
+import 'package:task1/screens/login.dart';
 import 'package:task1/models/post.dart';
+import 'package:task1/screens/more.dart';
 import 'package:task1/services/remote.dart';
 
 class Home2 extends StatefulWidget {
@@ -54,7 +55,12 @@ class _Home2State extends State<Home2> {
           title: Text("Lorem Ipsum"),
           leading: IconButton(icon: Icon(Icons.menu_rounded), onPressed: () {}),
           actions: [
-            IconButton(icon: Icon(Icons.search_rounded), onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.search_rounded),
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => More()));
+                }),
           ],
           flexibleSpace: Container(
             decoration: BoxDecoration(color: Color(0xffE43228)),

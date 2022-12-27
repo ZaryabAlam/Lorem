@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'login.dart';
+import 'screens/home.dart';
+import 'screens/login.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
-//test
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 class _MyAppState extends State<MyApp> {
